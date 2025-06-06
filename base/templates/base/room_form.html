@@ -5,7 +5,7 @@
 <div>
     <form method = "POST" action ="">
         {% csrf_token %} <!-- this token is sent to avoid malicious attacks, send token with every form-->
-        
+        {{form.as_p}} <!-- .as_p will wrap a paragraph around each value--> 
         <input type="submit" value="SUBMIT" />
 
     </form>
