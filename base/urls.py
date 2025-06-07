@@ -7,8 +7,8 @@ urlpatterns = [
     path('register/', views.registerPage, name='register'),
 
     path('', views.home, name='home'),
-    path('room/<str:pk>/', views.room, name='room'), 
-
+    path('room/<str:pk>/', views.room, name='room'), # str:pk means primary key, which is a unique identifier for each room
+    path('profile/<str:pk>/', views.userProfile, name='user-profile'),
     path('create_room/', views.createRoom, name='create-room'),
     path('update_room/<str:pk>/', views.updateRoom, name='update-room'),
 
