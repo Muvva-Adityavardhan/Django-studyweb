@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-
+from django.contrib.auth.forms import UserCreationForm
 # rooms = [
 #     {'id':1, 'name':"Lets learn python!"},
 #     {'id':2, 'name':"Design with me"},
@@ -17,11 +17,13 @@ from django.http import HttpResponse
 
 def loginPage(request):
 
+    page = 'login' 
+
     if(request.user.is_authenticated):
         return redirect('home')
     
     if(request.method == 'POST'):
-        username = request.POST.get('username')
+        username = request.POST.get('username').lower()
         password = request.POST.get('password')
 
         try:
@@ -37,13 +39,31 @@ def loginPage(request):
         else:
             messages.error(request, 'Username or Password does not exist')
 
-    context = {}
+    context = {'page':page}
     return render(request, 'base/login_register.html',context)
 
 
 def logoutUser(request):
     logout(request)
     return redirect('home')
+
+
+def registerPage(request):
+    form = UserCreationForm()
+    context = {'form':form}
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'An error occurred during registration')
+    
+    return render(request,'base/login_register.html', context)
 
 
 def home(request):
@@ -68,7 +88,8 @@ def home(request):
 
 def room(request,pk):
     room = Room.objects.get(id=pk)
-    context = {'room':room}
+    room_messages = room.message_set.all().order_by('-created') # Give us the set of messages that are related to this specific room
+    context = {'room':room, 'room_messages':room_messages}
     return render(request, 'base/room.html',context)
 
 
