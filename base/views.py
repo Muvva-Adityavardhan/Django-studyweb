@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models import Q
 # Create your views here.
 from .models import Room, Topic
 from .forms import RoomForm
@@ -11,7 +12,12 @@ from .forms import RoomForm
 def home(request):
     q = request.GET.get('q')
     if q != None:
-        rooms = Room.objects.filter(topic__name__icontains=q) #icontains in case insensitive, contains is case sensitive
+        rooms = Room.objects.filter(
+            Q(topic__name__icontains=q) |
+            Q(name__icontains=q) |
+            Q(description__icontains=q)
+            ) 
+        #icontains in case insensitive, contains is case sensitive
     else:
         rooms = Room.objects.all()
     
