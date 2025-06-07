@@ -13,7 +13,7 @@ class Room(models.Model):
     topic = models.ForeignKey(Topic,on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
-    #participants = 
+    participants = models.ManyToManyField(User, related_name='participants', blank=True) # ManyToManyField --> Many users can join a room
     updated = models.DateTimeField(auto_now=True) #auto_now --> Time stamp at every time we add 
     created = models.DateTimeField(auto_now_add=True) #auto_now_add --> Time stamp at the time of creation only
     

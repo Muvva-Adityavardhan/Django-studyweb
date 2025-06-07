@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 # Create your views here.
-from .models import Room, Topic
+from .models import Room, Topic, Message
 from .forms import RoomForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -88,8 +88,19 @@ def home(request):
 
 def room(request,pk):
     room = Room.objects.get(id=pk)
-    room_messages = room.message_set.all().order_by('-created') # Give us the set of messages that are related to this specific room
-    context = {'room':room, 'room_messages':room_messages}
+    room_messages = room.message_set.all().order_by('-created') # Give us the set of messages that are related to this specific room, many to one
+    participants = room.participants.all() #Many to many relationship, so we can access the participants of the room
+    
+    if request.method=="POST":
+        message = Message.objects.create(
+            user = request.user,
+            room = room,
+            body = request.POST.get('body') 
+        )
+        room.participants.add(request.user)  # Add the user to the participants of the room
+        return redirect('room', pk=room.id)
+    
+    context = {'room':room, 'room_messages':room_messages, 'participants':participants}
     return render(request, 'base/room.html',context)
 
 
