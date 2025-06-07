@@ -9,8 +9,16 @@ from .forms import RoomForm
 # ]
 
 def home(request):
-    rooms = Room.objects.all()
+    q = request.GET.get('q')
+    if q != None:
+        rooms = Room.objects.filter(topic__name__icontains=q) #icontains in case insensitive, contains is case sensitive
+    else:
+        rooms = Room.objects.all()
+    
+    #rooms = Room.objects.filter(topic__name=q)
+
     topics = Topic.objects.all()
+
     context = {'rooms':rooms, 'topics': topics}
     return render(request, 'base/home.html', context)
 
