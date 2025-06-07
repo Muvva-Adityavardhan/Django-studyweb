@@ -9,6 +9,10 @@ from .forms import RoomForm
 #     {'id':3, 'name':"Frontend developers"},
 # ]
 
+def loginPage(request):
+    context = {}
+    return render(request, 'base/login_register.html',context)
+
 def home(request):
     q = request.GET.get('q')
     if q != None:
@@ -24,8 +28,9 @@ def home(request):
     #rooms = Room.objects.filter(topic__name=q)
 
     topics = Topic.objects.all()
+    room_count = rooms.count()
 
-    context = {'rooms':rooms, 'topics': topics}
+    context = {'rooms':rooms, 'topics': topics, 'room_count':room_count}
     return render(request, 'base/home.html', context)
 
 def room(request,pk):
@@ -65,3 +70,4 @@ def deleteRoom(request,pk):
         return redirect('home')
 
     return render(request,'base/delete.html',{'obj':room})
+
