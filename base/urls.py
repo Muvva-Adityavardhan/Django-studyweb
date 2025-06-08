@@ -17,5 +17,6 @@ urlpatterns = [
     
     path('update_user/', views.updateUser, name='update-user'),
     path('topics/', views.topicsPage, name='topics'),
+    path('activity/', views.activityPage, name='activity'),  # This is a duplicate of topicsPage, consider removing one if not needed
 ] 
 # Even if you change the path, no need to change at every place as already name="" variable helps in how to access and use the url tag in the home.html file
