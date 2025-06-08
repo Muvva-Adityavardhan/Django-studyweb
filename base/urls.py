@@ -16,5 +16,6 @@ urlpatterns = [
     path('delete_message/<str:pk>/', views.deleteMessage, name='delete-message'),
     
     path('update_user/', views.updateUser, name='update-user'),
+    path('topics/', views.topicsPage, name='topics'),
 ] 
 # Even if you change the path, no need to change at every place as already name="" variable helps in how to access and use the url tag in the home.html file
