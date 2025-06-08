@@ -119,6 +119,16 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+
+#STATIC_ROOT
+# STATIC_ROOT is for handling static files in production. Media files (user-uploaded content)
+# It is the directory where static files will be collected when you run `python manage.py collectstatic`.
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
